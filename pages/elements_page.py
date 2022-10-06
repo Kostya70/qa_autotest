@@ -1,7 +1,10 @@
+import random
 import time
 
+from selenium.webdriver.common.by import By
+
 from generator.generator import generated_person
-from locators.elements_page_locators import TextBoxPageLocators
+from locators.elements_page_locators import TextBoxPageLocators, CheckBoxPageLocators
 from pages.base_page import BasePage
 
 class TextBoxPage(BasePage):
@@ -28,3 +31,57 @@ class TextBoxPage(BasePage):
         permanent_address = self.element_is_present(self.locators.CREATED_PERMANENT_ADRESS).text.split(':')[1]
         return full_name, email, current_address, permanent_address
 
+class CheckBoxPage(BasePage):
+    locators = CheckBoxPageLocators()
+
+    def open_full_list(self):
+        self.element_is_visible(self.locators.EXPAND_ALL_BUTTON).click()
+
+    def click_random_checkbox(self):
+        item_list = self.elements_are_visible(self.locators.ITEM_LIST)
+        count = 21
+        while count != 0:
+            item = item_list[random.randint(1, 15)] # всего 17 элементов будем обращаться от 1 до 15
+            if count > 0:
+                self.go_to_element(item)
+                item.click()
+                print(item.text)
+                count -= 1
+            else:
+                break
+
+    def get_checked_checkboxes(self):
+        checked_list = self.elements_are_present(self.locators.CHECKED_ITEMS)
+        data = []
+        for box in checked_list:
+            title_item = box.find_elements(By.XPATH, ".//ancestor::span[@class='rct-title']")
+            data.append(title_item)
+        return str(data).replace(' ', '').replace('doc', '').replace('.', '').lower()
+
+    def get_output_result(self):
+        result_list = self.elements_are_present(self.locators.OUTPUT_RESULT)
+        data = []
+        for item in result_list:
+            data.append(item.text)
+        return str(data).replace(' ', '').lower()
+
+
+#     def get_checked_checkboxes(self):
+#         checked_list = self.element_are_present(self.locators.CHECKED_ITEMS)
+#         data = [] # список куда буду писать данные
+#         for box in checked_list:
+#             title_item = box.find_elements(By.XPATH, ".//ancestor::span[@class='rct-title']")
+#             data.append(title_item) # добавляем в список
+#         return data
+#
+# #         for item in item_list:
+# # #            print(item.text) #проверяю
+# #             self.go_to_element(item) #элемент был перекрыт этот метод поможет
+# #             item.click()
+#
+#     def get_output_result(self):
+#         result_list = self.elements_are_present(self.locators.OUTPUT_RESULT)
+#         data = []
+#         for item in result_list:
+#             data.append(item.text)
+#         return data
