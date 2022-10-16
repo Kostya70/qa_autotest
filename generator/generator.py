@@ -1,4 +1,4 @@
-from data.data import Person
+from data.data import Person, Color
 from faker import Faker
 
 faker_ru = Faker('ru-RU')
@@ -11,4 +11,9 @@ def generated_person():
         email= faker_ru.email(),
         current_address= faker_ru.address(),
         permanent_address= faker_ru.address(),
+    )
+
+def generated_color():
+    yield Color(
+        color_name=["Red", "Blue", "Green", "Yellow", "Purple", "Black", "White", "Voilet", "Indigo", "Magenta", "Aqua"]
     )
