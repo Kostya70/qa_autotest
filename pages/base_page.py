@@ -42,7 +42,17 @@ class BasePage:
         action.context_click(element)
         action.perform()
 
-    def action_drag_and_drop_by_offset(self, element, x_coords, y_coords): # для того чтобы двигать ползунок по направлению
+    def action_drag_and_drop_by_offset(self, element, x_coords,
+                                       y_coords):  # для того чтобы двигать ползунок по направлению
         action = ActionChains(self.driver)
         action.drag_and_drop_by_offset(element, x_coords, y_coords)
         action.perform()
+
+    def action_move_to_element(self, element):
+        action = ActionChains(self.driver)
+        action.move_to_element(element) # move_to_element позволяет перевести мышь на элемент
+        action.perform()
+
+    def remove_footer(self):
+        self.driver.execute_script("document.getElementsByTagName('footer')[0].remove();")
+        self.driver.execute_script("document.getElementsById('close-fixedban').remove();")
